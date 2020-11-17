@@ -1,0 +1,21 @@
+{
+    "mapStateToProps":{
+        "scope": "javascriptreact",
+        "prefix": ["mapstate", "map-state-to-props", "mstp"],
+        "body": ["const mapStateToProps = (state) => {", "\treturn { $0 }", "};"],
+        "description": "create shell for mapStateToProps function"
+    },
+    "reducer boilerplate": {
+        "scope": "javascript",
+        "prefix": ["reducer"],
+        "body": ["import { $1, $2 } from '../actions/types';", "", 
+            "const initialState = {$0};", "", 
+            "const $TM_FILENAME_BASE = (state = initialState, action) => {",
+            "\tconst { type, payload } = action;", "",
+            "\tswitch (type) {", "\t\tcase $1:", "\t\t\treturn state",
+            "\t\tcase $2:", "\t\t\treturn state", "\t\tdefault:",
+            "\t\t\treturn state", "\t\t}", "\t};", "", 
+            "export default $TM_FILENAME_BASE;"],
+        "description": "Simple reducer boilerplate"
+    }
+}

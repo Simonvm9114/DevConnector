@@ -13,24 +13,23 @@ const User = require('../../models/User');
 router.post(
   '/',
   [
-    check('name', 'Name is required').not().isEmpty(),
-    check('email', 'Enter a valid email adres')
+    check('name', '~ is required').not().isEmpty(),
+    check('email', '~ is invalid')
       .isEmail()
       .custom((value) => {
         return User.findOne({ email: value }).then((user) => {
           if (user) {
-            return Promise.reject('E-mail adres is already in use');
+            return Promise.reject('~ is already in use');
           }
         });
       }),
     check('password')
       .isLength({ min: 6, max: 20 })
-      .withMessage('Must be 6-20 characters')
+      .withMessage('~ must be 6-20 characters')
       .matches(/\d/)
-      .withMessage('Should contain a number'),
+      .withMessage('~ should contain a number'),
   ],
   async (req, res) => {
-    console.log(req.body);
     const validationErrors = validationResult(req);
     if (!validationErrors.isEmpty()) {
       return res.status(400).json({ errors: validationErrors.array() });
@@ -60,10 +59,8 @@ router.post(
           res.json({ token });
         }
       );
-
-      // res.send('User registered');
     } catch (err) {
-      console.log(err.message);
+      console.error(err.message);
       return res.status(500).send('Server error');
     }
   }
