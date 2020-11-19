@@ -44,7 +44,7 @@ router.post(
 // @access  Public
 router.get('/', async (req, res) => {
   try {
-    const allPosts = await Post.find();
+    const allPosts = await Post.find().sort('-date');
 
     res.json(allPosts);
   } catch (err) {
@@ -146,7 +146,7 @@ router.post(
 
       await post.save();
 
-      res.json(post);
+      res.json(post.likes);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');
@@ -178,11 +178,16 @@ router.delete(
         return like.user.toString() !== req.user.id;
       });
 
+      // If the user haven't liked the post yet
+      if (post.likes === newLikes) {
+        return res.status(400).json({ msg: "user didn't like the post yet." });
+      }
+
       post.likes = newLikes;
 
       post.save();
 
-      res.json(post);
+      res.json(post.likes);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');
@@ -226,7 +231,7 @@ router.post(
 
       await post.save();
 
-      res.json(post);
+      res.json(post.comments);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');
@@ -278,7 +283,7 @@ router.delete(
 
       await post.save();
 
-      res.json(post);
+      res.json(post.comments);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');
